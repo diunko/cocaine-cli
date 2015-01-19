@@ -136,11 +136,15 @@ def handle_streaming_response(r):
     print "headers", r.headers
     for ch in r.iter_lines(chunk_size=1):
         logging.debug("got chunk %s"%ch)
-        m = json.loads(ch)
-        if "error" in m and  m["error"]:
-            print m["traceback"]
+        r = json.loads(ch)
+        if "error" in r and  r["error"]:
+            print r["traceback"]
         else:
-            print m["message"]
+            try:
+                m = r["message"].decode("base64")
+            else:
+                m = r["message"]
+            print m
     
 
 @cli.command()
@@ -163,17 +167,7 @@ def push(force, no_build, **kwargs):
                       params=params,
                       data=json.dumps(version_def, indent=2),
                       stream=True)
-    # print "chunked", r.chunked
-    print "response", r
-    print "headers", r.headers
-    for ch in r.iter_lines(chunk_size=1):
-        logging.debug("got chunk %s"%ch)
-        m = json.loads(ch)
-        if "error" in m and  m["error"]:
-            print m["traceback"]
-        else:
-            print m["message"]
-
+    handle_streaming_response(r)
 
 @cli.command()
 @click.argument("task-id")
