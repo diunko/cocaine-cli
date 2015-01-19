@@ -140,7 +140,7 @@ def handle_streaming_response(r):
         if "error" in r and  r["error"]:
             print r["traceback"]
         else:
-            try:
+            if "b64" in r and r["b64"]:
                 m = r["message"].decode("base64")
             else:
                 m = r["message"]
