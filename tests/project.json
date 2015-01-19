@@ -1,0 +1,50 @@
+{
+  "name": "testproj",
+  "version": "somever",
+
+  "members": {
+    "user2": ["developer"],
+    "user3": ["admin", "developer"],
+    "user1": ["admin"]
+  },
+
+  "container": {
+    "source": {
+      "url": "ipv6.registry.tst.ape.yandex.net/nodejs",
+      "type": "docker"
+    }
+  },
+
+  "clusters": {
+    
+    "production": {
+      "status": "none",
+      "profile": "docker-norepo",
+      "manifest": {
+        "environment": {
+          "NODE_ENV": "production"
+        },
+        "slave": "/start"
+      }
+    },
+
+    "unstable": {
+      "routing": {
+        "somever":10,
+        "smthelse":123
+      },
+      "status": "none",
+      "logging": {
+        "search_query": "app\\/testproj*",
+        "dashboard": "testproj"
+      },
+      "profile": "docker-norepo",
+      "manifest": {
+        "environment": {
+          "NODE_ENV": "testing"
+        },
+        "slave": "/start"
+      }
+    }
+  }
+}
